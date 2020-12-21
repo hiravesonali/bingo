@@ -2,7 +2,7 @@
   <main class="-mt-32">
     <div class="max-w-7xl mx-auto pb-12 px-4 sm:px-6 lg:px-8">
       <div class="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
-        <div class="rounded-lg h-96">
+        <div class="rounded-lg min-h-full">
           <div class="mt-4 mx-12 w-full">
             <div class="py-8 px-4 sm:px-10">
               <form class="space-y-6" action="#" method="POST">
@@ -41,15 +41,12 @@
                     </svg>
                   </button>
                 </div>
-                <div class="flex items-center">
-                  <label class="block font-medium text-gray-700 mr-3 w-48">
-                    Person
-                  </label>
+                <div class="flex flex-col ml-48">
                   <input
                     v-for="name of names"
                     :key="name"
                     :value="name"
-                    class="flex md:flex-col px-3 py-2 mb-4 text-lg font-semibold focus:outline-none"
+                    class="flex md:flex-col px-3 py-2 mb-2 text-lg font-semibold focus:outline-none"
                   />
                 </div>
                 <div class="flex items-center">
@@ -58,11 +55,15 @@
                   </label>
                   <div class="mt-1">
                     <input
+                      v-model="choice"
                       name="text"
                       class="appearance-none block px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      :class="{ 'border-red-500': errors.choice }"
                     />
+                    <div class="text-red-500 text-sm">{{ errors.choice }}</div>
                   </div>
                   <button
+                    @click="addChoice"
                     type="button"
                     class="mx-3 text-green-500 hover:bg-purple-500 hover:text-white rounded-full focus:outline-none p-0.5"
                   >
@@ -79,6 +80,14 @@
                       ></path>
                     </svg>
                   </button>
+                </div>
+                <div class="flex flex-col ml-48">
+                  <input
+                    v-for="choice of choices"
+                    :key="choice"
+                    :value="choice"
+                    class="flex md:flex-col px-3 py-2 mb-2 text-lg font-semibold focus:outline-none"
+                  />
                 </div>
                 <button
                   href="#"
@@ -102,7 +111,9 @@ export default {
   data() {
     return {
       name: "",
+      choice: "",
       names: [],
+      choices: [],
       errors: {},
     };
   },
@@ -116,6 +127,15 @@ export default {
       }
       this.names.push(this.name);
       this.name = null;
+    },
+    addChoice: function() {
+      this.errors = {};
+      if (this.choice === "") {
+        this.errors.choice = "Choice is required";
+        return;
+      }
+      this.choices.push(this.choice);
+      this.choice = null;
     },
   },
 };
